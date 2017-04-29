@@ -31,26 +31,33 @@ startButtonList(topics);
 
 //create a new gif button from the input field
 $("#make-button").on("click", function(event) {
-	//disable button click if the input field is empty
+	//To Do: disable button click if the input field is empty
 
 
 	event.preventDefault();
 	var thisGif = $("#new-gif").val();
+	console.log(thisGif + " is a " + typeof thisGif);
 //create a button tag with the thisGif as the button's "data-value"
 	 var newButton = $("<button>");
-	 newButton.addClass("gif-button")
+	 newButton.addClass("gif-button");
 	//jquery set attribute value for button's "data-value" to the value of topics[i]
-	newButton.attr("data-value", thisGif).html(thisGif);
+	newButton.attr("data-value", thisGif).html(thisGif).attr("id", "click-me");
 	//append the button as a child of the button tag with a class of "button-list-container"
 	$(".button-list-container").append(newButton);
 	//after the new button is created, clear the input's "data-value"
 	$("#new-gif").val("");
 });
+
+//test created button
+$("#click-me").on("click", function() {
+	console.lot("The button works")
+});
 	
 // When the user clicks on a button show a list of gifs for that button
-$(".gif-button").on("click", function() {
-	console.log("this: " + this);
+$(document.body).on("click", '.gif-button', function() {
+	console.log($(this).attr("data-value"));
 	gifName = $(this).attr("data-value");
+	console.log(gifName + " is a " + typeof gifName);
 	var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + gifName + "&limit=10&rating=g&rating=pg&rating=pg-13&api_key=dc6zaTOxFJmzC";
 	
 	//AJAX get request these parameters: limit=10, 
