@@ -14,17 +14,24 @@ var gifName;
 function startButtonList(topics) {	
 	//for loop iterates through the topics array
 	for (i=0; i<topics.length; i++) {
-		//declate a variable set a button tag
+		//declare a parent div tag as a tile container for the button
+		var newButtonDiv = $("<div class=\"col-sm-3\">");
+		//declare a variable set a button tag
 		var newButton = $("<button>");
-		newButton.addClass("gif-button");
+		newButton.addClass("gif-button btn btn-default");
 		//jquery set attribute value for button's "data-value" to the value of topics[i]
 		newButton.attr("data-value", topics[i]).html(topics[i]);
-		//append the button as a child of the button tag with a class of "button-list-container"
-		$(".button-list-container").append(newButton);
+		//append the button as a child of the Div tag 
+		newButtonDiv.append(newButton);
+		//append newButtonDiv to with a class of "button-list-container"
+		$(".button-list-container").append(newButtonDiv);
 	}
 }
 
-
+//clear out gifs before populating new list
+function clearGifs() {
+	$(".gif-container-list").html("");
+}
 //DO STUFF WITH THE VARIABLES AND FUNCTIONS----------------------------------------
 
 startButtonList(topics);
@@ -33,19 +40,23 @@ startButtonList(topics);
 $("#make-button").on("click", function(event) {
 	//To Do: disable button click if the input field is empty
 
-
 	event.preventDefault();
 	var thisGif = $("#new-gif").val();
 	console.log(thisGif + " is a " + typeof thisGif);
+
+	if (thisGif != "") {
 //create a button tag with the thisGif as the button's "data-value"
-	 var newButton = $("<button>");
-	 newButton.addClass("gif-button");
+	var newButtonDiv = $("<div class=\"col-sm-3\">");
+	var newButton = $("<button>");
+	newButton.addClass("gif-button btn btn-default");
 	//jquery set attribute value for button's "data-value" to the value of topics[i]
 	newButton.attr("data-value", thisGif).html(thisGif).attr("id", "click-me");
 	//append the button as a child of the button tag with a class of "button-list-container"
-	$(".button-list-container").append(newButton);
+	newButtonDiv.append(newButton);
+	$(".button-list-container").append(newButtonDiv);
 	//after the new button is created, clear the input's "data-value"
 	$("#new-gif").val("");
+	}
 });
 
 //test created button
@@ -55,10 +66,11 @@ $("#click-me").on("click", function() {
 	
 // When the user clicks on a button show a list of gifs for that button
 $(document.body).on("click", '.gif-button', function() {
+	clearGifs();
 	console.log($(this).attr("data-value"));
 	gifName = $(this).attr("data-value");
 	console.log(gifName + " is a " + typeof gifName);
-	var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + gifName + "&limit=10&rating=g&rating=pg&rating=pg-13&api_key=dc6zaTOxFJmzC";
+	var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + gifName + "&limit=10&rating=g&rating=pg&api_key=dc6zaTOxFJmzC";
 	
 	//AJAX get request these parameters: limit=10, 
 	$.ajax({
@@ -77,9 +89,10 @@ $(document.body).on("click", '.gif-button', function() {
 			//rating 
 			var rating = res.data[i].rating;
 		//create div tag that is assigned to a variable 
-			var newGifDiv = $("<div>");
+			var newGifDiv = $("<div class=\"col-sm-3\">");
+
 			//set the class of these child div tags to "gif-container"
-			newGifDiv.addClass("gif-container");
+			newGifDiv.addClass("gif-container ");
 
 			//append a p tag with the rating to the gif-container div 
 			newGifDiv.append("<p>Rating: " + rating + "</p>");
@@ -100,18 +113,23 @@ $(document.body).on("click", '.gif-button', function() {
 	});
 	
 });
+// When the user clicks one of the GIPHY images
+
+$(document.body).on("click", '.gif', function() {
+	var gifState = $(this).attr("data-state");
+	var gifAnimate = $(this).attr("data-animate");
+	var gifStill = $(this).attr("data-still");
+
+	//the gif should animate if it was still
+	if (gifState === "still") {
+		$(this).attr("src", gifAnimate);
+		$(this).attr("data-state", "animate");
+	} else {
+		//the gif should freeze if it was animated
+		$(this).attr("src", gifStill);
+		$(this).attr("data-state", "still");
+	}
+});
 
 //----------------------------------------
 
-// When the user clicks one of the still GIPHY images
-
-	//the gif should animate
-
-	//If the user clicks the gif again, it should stop playing.
-
-// Under every gif, display its rating (PG, G, so on).
-
-
-// Only once you get images displaying with button presses should you move on to the next step.
-// Add a form to your page takes the value from a user input box and adds it into your topics array. Then make a function call that takes each topic in the array remakes the buttons on the page.
-// Rejoice! You just made something really cool.
