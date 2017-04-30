@@ -70,7 +70,7 @@ $(document.body).on("click", '.gif-button', function() {
 	console.log($(this).attr("data-value"));
 	gifName = $(this).attr("data-value");
 	console.log(gifName + " is a " + typeof gifName);
-	var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + gifName + "&limit=10&rating=g&rating=pg&api_key=dc6zaTOxFJmzC";
+	var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + gifName + "&limit=10&rating=g&rating=pg&api_key=dc6zaTOxFJmzC";
 	
 	//AJAX get request these parameters: limit=10, 
 	$.ajax({
